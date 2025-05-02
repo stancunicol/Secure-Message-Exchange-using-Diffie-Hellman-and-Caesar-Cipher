@@ -13,8 +13,14 @@ public class Client {
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              Scanner scanner = new Scanner(System.in)) {
 
-            System.out.print("Enter q (prime number): ");
-            BigInteger q = new BigInteger(scanner.nextLine());
+            BigInteger q;
+            do {
+                System.out.print("Enter q (prime number): ");
+                q = new BigInteger(scanner.nextLine());
+                if (!q.isProbablePrime(100)) {
+                    System.out.println("q is not a prime number. Please enter a prime number.");
+                }
+            } while (!q.isProbablePrime(100));
             System.out.print("Enter a (primitive root): ");
             BigInteger a = new BigInteger(scanner.nextLine());
 
@@ -41,7 +47,6 @@ public class Client {
             do {
                 k = yServer.modPow(xClient, q);
                 if (k.equals(BigInteger.ZERO)) {
-                    // Regenerare xClient dacă k == 0
                     xClient = new BigInteger(q.bitLength(), new java.util.Random())
                             .mod(q.subtract(BigInteger.ONE))
                             .add(BigInteger.ONE);
